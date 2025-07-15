@@ -3,6 +3,11 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
+import UseStateExample from "./pages/Playground/UseStateExample";
+import UseEffectExample from "./pages/Playground/UseEffectExample";
+import UseRefExample from "./pages/Playground/UseRefExample";
+import ProtectedRoute from './pages/components/ProtectedRoute';
+import NotFoundPage from './pages/components/NotFoundPage';
 
 function App(){
   return (
@@ -12,6 +17,11 @@ function App(){
       <Route path="/register" element={<RegisterPage/>}/>
       <Route path="/forgot" element={<ForgotPasswordPage/>}/>
       <Route path="/dashboard" element={<DashboardPage/>}/> 
+      <Route path="/use-state" element={<UseStateExample/>}/>
+      <Route path="/use-effect" element={<UseEffectExample/>}/>
+      <Route path="/use-ref" element={<UseRefExample/>}/>
+      <Route path="/dashboard" element={<ProtectedRoute> <DashboardPage/> </ProtectedRoute>} />
+      <Route path="*" element={<NotFoundPage/>} />
      </Routes>
      </BrowserRouter>
   );
