@@ -1,34 +1,73 @@
-import { useState } from "react";
+import { useState } from 'react';
+import Swal from 'sweetalert2';
+import './ForgotPasswordPage.css';
+import { auth } from '../../firebase';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 function ForgotPasswordPage() {
-    const [email, setEmail] = useState("");
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      // Aquí iría la lógica para enviar el correo de recuperación
-      console.log("Solicitud de recuperación para:", email);
-      alert(`Si ${email} está registrado, se enviarán instrucciones para recuperar la contraseña.`);
-      setEmail(""); // limpiar campo
-    };
-  
-    return (
-      <div>
-        <h1>Recuperar Contraseña</h1>
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email) {
+      Swal.fire("Campo vacío", "Por favor ingresa tu correo.", "warning");
+      return;
+    }
+
+    const formatoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formatoCorreo.test(email)) {
+      Swal.fire("Correo inválido", "Por favor escribe un correo válido.", "error");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Swal.fire({
+        title: "¡Revisa tu correo!",
+        html: `Te hemos enviado instrucciones para recuperar tu contraseña, tienes 60 minutos. <strong>¡Podría estar en SPAM!</strong>`,
+        icon: "success",
+        timer: 5000,
+        showConfirmButton: false
+      });
+      setEmail('');
+    } catch (error) {
+      console.error("Error Firebase:", error.code, error.message);
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
+  const handleGoBack = () => {
+    window.location.href = '/';
+  };
+
+  return (
+    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-gradient">
+      <div className="form-card">
+        <h3 className="mb-4 text-center">Recuperar Contraseña</h3>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>Correo electrónico:</label>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Correo electrónico</label>
             <input
               type="email"
+              className="form-control"
+              id="email"
+              placeholder="tucorreo@ejemplo.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="ejemplo@correo.com"
             />
           </div>
-          <button type="submit">Enviar instrucciones</button>
+          <div className="d-grid gap-2">
+            <button type="submit" className="btn btn-primary">Enviar instrucciones</button>
+            <button type="button" className="btn btn-outline-secondary" onClick={handleGoBack}>
+              Volver al inicio de sesión
+            </button>
+          </div>
         </form>
       </div>
-    );
-  }
-  
-  export default ForgotPasswordPage;
+    </div>
+  );
+}
+
+export default ForgotPasswordPage;

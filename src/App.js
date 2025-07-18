@@ -8,6 +8,7 @@ import UseEffectExample from "./pages/Playground/UseEffectExample";
 import UseRefExample from "./pages/Playground/UseRefExample";
 import ProtectedRoute from './pages/components/ProtectedRoute';
 import NotFoundPage from './pages/components/NotFoundPage';
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 
 function App(){
   return (
@@ -20,6 +21,7 @@ function App(){
       <Route path="/use-state" element={<UseStateExample/>}/>
       <Route path="/use-effect" element={<UseEffectExample/>}/>
       <Route path="/use-ref" element={<UseRefExample/>}/>
+      <Route path="/reset-password" element={<ResetPasswordPage/>}/>
       <Route path="/dashboard" element={<ProtectedRoute> <DashboardPage/> </ProtectedRoute>} />
       <Route path="*" element={<NotFoundPage/>} />
      </Routes>
